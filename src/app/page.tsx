@@ -32,6 +32,10 @@ function formatDate(iso: string): string {
 
 function computeStats(trades: Trade[]) {
   const total = trades.length;
+  if (total === 0) {
+    return { total: 0, buys: 0, sells: 0, avgLag: 0, highConviction: 0, latestDisclosure: "" };
+  }
+
   const buys = trades.filter((t) => t.type === "buy").length;
   const sells = total - buys;
   const avgLag = Math.round(

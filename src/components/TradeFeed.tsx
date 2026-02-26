@@ -55,6 +55,7 @@ export default function TradeFeed({ trades }: TradeFeedProps) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder='Search by Ticker [stock code], company, or politician…'
+          aria-label="Search trades by ticker, company, or politician"
           className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-11 pr-12 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500/40 focus:border-sky-500/40 transition-colors"
         />
         {isSearching ? (

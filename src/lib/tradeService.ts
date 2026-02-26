@@ -246,10 +246,7 @@ async function fetchFromQuiver(): Promise<Trade[] | null> {
       },
     );
 
-    if (!res.ok) {
-      console.warn(`[Quiver] API returned ${res.status} — falling through.`);
-      return null;
-    }
+    if (!res.ok) return null;
 
     const data: QuiverTrade[] = await res.json();
 
@@ -260,10 +257,8 @@ async function fetchFromQuiver(): Promise<Trade[] | null> {
       .slice(0, 50)
       .map(enrichTrade);
 
-    console.log(`[Quiver] Loaded ${trades.length} trades.`);
     return trades.length > 0 ? trades : null;
-  } catch (err) {
-    console.warn("[Quiver] Fetch failed:", err);
+  } catch {
     return null;
   }
 }
@@ -420,7 +415,7 @@ async function rapidApiFetch(path: string, apiKey: string): Promise<Response> {
       "X-RapidAPI-Key": apiKey,
       "X-RapidAPI-Host": RAPID_API_HOST,
     },
-    cache: "no-store",
+    next: { revalidate: 3600 }, // ISR: cache for 1 hour
   });
 }
 
@@ -431,14 +426,7 @@ async function fetchFromRapidApi(): Promise<Trade[] | null> {
   try {
     // Step 1: Fetch politician index
     const indexRes = await rapidApiFetch("/get_politicians", apiKey);
-    if (!indexRes.ok) {
-      const errBody = await indexRes.text().catch(() => "(unreadable)");
-      console.warn(
-        `[RapidAPI] /get_politicians returned ${indexRes.status} — ${errBody}\n` +
-        `  X-RapidAPI-Key: ${apiKey.slice(0, 6)}...${apiKey.slice(-4)}`,
-      );
-      return null;
-    }
+    if (!indexRes.ok) return null;
 
     const index: PoliticianIndex = await indexRes.json();
 
@@ -449,10 +437,7 @@ async function fetchFromRapidApi(): Promise<Trade[] | null> {
       .slice(0, 10)
       .map(([name]) => name);
 
-    if (topPoliticians.length === 0) {
-      console.warn("[RapidAPI] No politicians found in index.");
-      return null;
-    }
+    if (topPoliticians.length === 0) return null;
 
     // Step 3: Fetch profiles in parallel
     const profilePromises = topPoliticians.map(async (name) => {
@@ -473,10 +458,7 @@ async function fetchFromRapidApi(): Promise<Trade[] | null> {
     const allProfiles = await Promise.all(profilePromises);
     const allRawTrades = allProfiles.flat();
 
-    if (allRawTrades.length === 0) {
-      console.warn("[RapidAPI] No trade records found across profiles.");
-      return null;
-    }
+    if (allRawTrades.length === 0) return null;
 
     // Step 4: Transform, sort by date desc, take top 50
     const trades = allRawTrades
@@ -486,13 +468,8 @@ async function fetchFromRapidApi(): Promise<Trade[] | null> {
       .slice(0, 50)
       .map(enrichTrade);
 
-    console.log(
-      `[RapidAPI] Loaded ${trades.length} trades from ${allRawTrades.length} records ` +
-      `(${topPoliticians.length} politicians).`,
-    );
     return trades.length > 0 ? trades : null;
-  } catch (err) {
-    console.warn("[RapidAPI] Fetch failed:", err);
+  } catch {
     return null;
   }
 }
@@ -502,7 +479,6 @@ async function fetchFromRapidApi(): Promise<Trade[] | null> {
 // =====================================================================
 
 function getFromMockData(): Trade[] {
-  console.log("[Mock] Using built-in mock data (safety net).");
   return rawMockTrades.map(enrichTrade);
 }
 
