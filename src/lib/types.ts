@@ -3,6 +3,8 @@ export type Chamber = "Senate" | "House";
 export type TransactionType = "buy" | "sell";
 export type OwnerType = "Self" | "Spouse" | "Joint";
 
+export type DataSource = "quiver" | "public" | "mock";
+
 export interface Trade {
   id: string;
   politicianName: string;
@@ -27,6 +29,7 @@ export interface Trade {
   committees: string[];
   convictionScore: number; // 0–100
   sectorInsight: string;
+  source: DataSource;
 }
 
 export type ConvictionTier = "high" | "medium" | "low";

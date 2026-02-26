@@ -1,9 +1,15 @@
 "use client";
 
-import type { Trade } from "@/lib/types";
+import type { Trade, DataSource } from "@/lib/types";
 import ConvictionGauge from "./ConvictionGauge";
 import FreshnessBar from "./FreshnessBar";
-import { TrendingUp, TrendingDown, User, Users, Heart } from "lucide-react";
+import { TrendingUp, TrendingDown, User, Users, Heart, Database } from "lucide-react";
+
+const SOURCE_LABEL: Record<DataSource, string> = {
+  public: "Source: Public Government Records",
+  quiver: "Source: Quiver Quantitative",
+  mock: "Source: Sample Data (Demo)",
+};
 
 interface TradeCardProps {
   trade: Trade;
@@ -107,6 +113,14 @@ export default function TradeCard({ trade }: TradeCardProps) {
             daysToDisclose={trade.daysToDisclose}
           />
         </div>
+      </div>
+
+      {/* Source label */}
+      <div className="flex items-center gap-1.5 pt-2 border-t border-slate-800/50">
+        <Database className="w-3 h-3 text-slate-600" />
+        <span className="text-[10px] text-slate-600">
+          {SOURCE_LABEL[trade.source]}
+        </span>
       </div>
     </article>
   );

@@ -11,6 +11,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { getCongressTrades } from "@/lib/tradeService";
+import type { Trade, DataSource } from "@/lib/types";
 import TradeFeed from "@/components/TradeFeed";
 import EducationCard from "@/components/EducationCard";
 
@@ -26,7 +27,7 @@ function formatDate(iso: string): string {
   });
 }
 
-function computeStats(trades: ReturnType<typeof getCongressTrades>) {
+function computeStats(trades: Trade[]) {
   const total = trades.length;
   const buys = trades.filter((t) => t.type === "buy").length;
   const sells = total - buys;
@@ -48,8 +49,14 @@ function computeStats(trades: ReturnType<typeof getCongressTrades>) {
 /*  Page                                                               */
 /* ------------------------------------------------------------------ */
 
-export default function Dashboard() {
-  const trades = getCongressTrades();
+const SOURCE_LABELS: Record<DataSource, string> = {
+  quiver: "Data from Quiver Quantitative (live API)",
+  public: "Data from Public Record (House Stock Watcher)",
+  mock: "Sample data (demo mode — no API key set)",
+};
+
+export default async function Dashboard() {
+  const { trades, source } = await getCongressTrades();
   const stats = computeStats(trades);
 
   return (
@@ -58,36 +65,16 @@ export default function Dashboard() {
       {/*  TOP HEADER                                                      */}
       {/* ================================================================ */}
       <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col items-center justify-center">
           <div className="flex items-center gap-3">
             <Landmark className="h-7 w-7 text-sky-400" />
-            <div>
-              <h1 className="text-xl font-bold text-slate-100 leading-tight">
-                Capitol Buys
-              </h1>
-              <p className="text-xs text-slate-400">
-                See what Congress is buying.
-              </p>
-            </div>
+            <h1 className="text-xl font-bold text-slate-100 leading-tight">
+              Capitol Buys
+            </h1>
           </div>
-
-          <nav className="hidden sm:flex items-center gap-6 text-sm text-slate-400">
-            <a href="/" className="text-slate-100 font-medium">
-              Dashboard
-            </a>
-            <a
-              href="/trades"
-              className="hover:text-slate-200 transition-colors"
-            >
-              Trades
-            </a>
-            <a
-              href="/education"
-              className="hover:text-slate-200 transition-colors"
-            >
-              Learn
-            </a>
-          </nav>
+          <p className="text-xs text-slate-400 mt-0.5">
+            See what Congress is buying.
+          </p>
         </div>
       </header>
 
@@ -127,16 +114,23 @@ export default function Dashboard() {
             />
           </div>
 
-          {/* Data window info */}
-          <div className="flex items-center gap-2 text-xs text-slate-500">
-            <CalendarCheck className="w-3.5 h-3.5 text-slate-600" />
-            <p>
+          {/* Data window info + source indicator */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-xs text-slate-500">
+            <span className="inline-flex items-center gap-1.5">
+              <CalendarCheck className="w-3.5 h-3.5 text-slate-600" />
               Showing data from the last 90 days. Most recent Disclosure Date{" "}
               <span className="text-slate-600">[when we found out]</span>:{" "}
               <span className="text-slate-300 font-medium">
                 {formatDate(stats.latestDisclosure)}
               </span>
-            </p>
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-slate-600">
+              <span className={`w-1.5 h-1.5 rounded-full ${
+                source === "quiver" ? "bg-emerald-400" :
+                source === "public" ? "bg-sky-400" : "bg-amber-400"
+              }`} />
+              {SOURCE_LABELS[source]}
+            </span>
           </div>
         </section>
 

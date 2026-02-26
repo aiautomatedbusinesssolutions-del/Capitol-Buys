@@ -5,6 +5,8 @@ import type { Trade } from "./types";
  * They get computed at runtime by tradeService.ts.
  */
 export const rawMockTrades: Omit<Trade, "daysSinceTrade" | "convictionScore">[] = [
+  // NOTE: All mock entries include `source: "mock"`.
+  //       The service layer adds daysSinceTrade and convictionScore at runtime.
   // 1. Fresh high-dollar buy, self-owned, fast disclosure
   {
     id: "t-001",
@@ -24,6 +26,7 @@ export const rawMockTrades: Omit<Trade, "daysSinceTrade" | "convictionScore">[] 
     daysToDisclose: 8,
     committees: ["Financial Services"],
     sectorInsight: "Tech Expansion",
+    source: "mock",
   },
   // 2. 40-day delayed small buy — amber/rose lag territory
   {
@@ -44,6 +47,7 @@ export const rawMockTrades: Omit<Trade, "daysSinceTrade" | "convictionScore">[] 
     daysToDisclose: 40,
     committees: ["Energy and Commerce"],
     sectorInsight: "Energy Shift",
+    source: "mock",
   },
   // 3. Spouse trade — moderate amount, quick disclosure
   {
@@ -64,6 +68,7 @@ export const rawMockTrades: Omit<Trade, "daysSinceTrade" | "convictionScore">[] 
     daysToDisclose: 11,
     committees: ["Armed Services", "Agriculture"],
     sectorInsight: "Tech Expansion",
+    source: "mock",
   },
   // 4. Large sell, self-owned, very late disclosure
   {
@@ -84,6 +89,7 @@ export const rawMockTrades: Omit<Trade, "daysSinceTrade" | "convictionScore">[] 
     daysToDisclose: 82,
     committees: ["Homeland Security"],
     sectorInsight: "Healthcare Play",
+    source: "mock",
   },
   // 5. Joint account, moderate range, moderate lag
   {
@@ -104,6 +110,7 @@ export const rawMockTrades: Omit<Trade, "daysSinceTrade" | "convictionScore">[] 
     daysToDisclose: 26,
     committees: ["Armed Services", "Oversight"],
     sectorInsight: "Tech Expansion",
+    source: "mock",
   },
   // 6. Small defense buy, self, fast disclosure
   {
@@ -124,6 +131,7 @@ export const rawMockTrades: Omit<Trade, "daysSinceTrade" | "convictionScore">[] 
     daysToDisclose: 7,
     committees: ["Foreign Affairs", "Homeland Security"],
     sectorInsight: "Defense & Security",
+    source: "mock",
   },
   // 7. Senate finance sell, spouse, moderate lag
   {
@@ -144,6 +152,7 @@ export const rawMockTrades: Omit<Trade, "daysSinceTrade" | "convictionScore">[] 
     daysToDisclose: 41,
     committees: ["Budget", "Judiciary"],
     sectorInsight: "Banking Bet",
+    source: "mock",
   },
   // 8. Mega buy, self, timely — highest conviction scenario
   {
@@ -164,6 +173,7 @@ export const rawMockTrades: Omit<Trade, "daysSinceTrade" | "convictionScore">[] 
     daysToDisclose: 5,
     committees: ["Financial Services"],
     sectorInsight: "Tech Expansion",
+    source: "mock",
   },
   // 9. Real estate play, joint, slow disclosure
   {
@@ -184,6 +194,7 @@ export const rawMockTrades: Omit<Trade, "daysSinceTrade" | "convictionScore">[] 
     daysToDisclose: 71,
     committees: ["Appropriations", "Intelligence"],
     sectorInsight: "Property Move",
+    source: "mock",
   },
   // 10. Small utility buy, self, moderate lag — low conviction
   {
@@ -204,5 +215,6 @@ export const rawMockTrades: Omit<Trade, "daysSinceTrade" | "convictionScore">[] 
     daysToDisclose: 34,
     committees: ["Finance", "Health"],
     sectorInsight: "Utilities Play",
+    source: "mock",
   },
 ];
