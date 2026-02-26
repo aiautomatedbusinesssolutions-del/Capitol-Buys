@@ -1,13 +1,16 @@
 import {
   Activity,
   AlertTriangle,
+  ArrowLeftRight,
   BarChart3,
   BookOpen,
   CalendarCheck,
   Clock,
+  Gauge,
   Landmark,
   Scale,
   Heart,
+  Timer,
   TrendingUp,
 } from "lucide-react";
 import { getCongressTrades } from "@/lib/tradeService";
@@ -247,6 +250,160 @@ export default async function Dashboard() {
                 carry the strongest conviction signal. Spouse and Joint trades
                 are still tracked, but they carry a lower weight in our
                 Conviction Score.
+              </p>
+            </EducationCard>
+
+            {/* Card 3: Types of Trades */}
+            <EducationCard
+              icon={<ArrowLeftRight className="h-5 w-5 text-emerald-400" />}
+              iconBg="bg-emerald-500/10"
+              title="Types of Trades"
+              subtitle="The different ways they move money"
+            >
+              <p>
+                Congressional disclosures use specific labels for each
+                transaction. Here&apos;s what they mean:
+              </p>
+              <ul className="space-y-2">
+                <li>
+                  <strong className="text-emerald-400">Purchase</strong>{" "}
+                  <span className="text-slate-400">
+                    [buying a new asset or adding to one they already own]
+                  </span>{" "}
+                  — the most watched type, because it shows where they&apos;re
+                  putting new money.
+                </li>
+                <li>
+                  <strong className="text-rose-400">Sale (Full/Partial)</strong>{" "}
+                  <span className="text-slate-400">
+                    [selling all or some of a stock they hold]
+                  </span>{" "}
+                  — could mean they&apos;re taking profits, cutting losses, or
+                  know something is coming.
+                </li>
+                <li>
+                  <strong className="text-amber-400">Exchange</strong>{" "}
+                  <span className="text-slate-400">
+                    [swapping one asset for another without buying or selling on
+                    the open market]
+                  </span>{" "}
+                  — common in retirement accounts and corporate stock plans.
+                </li>
+                <li>
+                  <strong className="text-sky-400">Diversified Assets</strong>{" "}
+                  <span className="text-slate-400">
+                    [funds like Mutual Funds or ETFs that hold many stocks at
+                    once]
+                  </span>{" "}
+                  — generally considered lower risk and less likely to signal
+                  insider knowledge.
+                </li>
+              </ul>
+            </EducationCard>
+
+            {/* Card 4: The 45-Day Disclosure Gap */}
+            <EducationCard
+              icon={<Timer className="h-5 w-5 text-amber-400" />}
+              iconBg="bg-amber-500/10"
+              title="The 45-Day Disclosure Gap"
+              subtitle="The &quot;Information Lag&quot;"
+            >
+              <p>
+                By law{" "}
+                <span className="text-slate-400">
+                  [The STOCK Act]
+                </span>
+                , politicians have up to{" "}
+                <strong className="text-amber-400">45 days</strong> to report a
+                trade after it happens. This means a &quot;New&quot; alert today might
+                actually show a move made{" "}
+                <strong className="text-slate-100">over a month ago</strong>.
+              </p>
+              <p>
+                We call this the{" "}
+                <strong className="text-slate-100">Disclosure Lag</strong>{" "}
+                <span className="text-slate-400">
+                  [the gap between when they traded and when the public finds
+                  out]
+                </span>
+                . On each trade card, our{" "}
+                <strong className="text-slate-100">Freshness Bar</strong> shows
+                this gap visually:
+              </p>
+              <ul className="space-y-1">
+                <li>
+                  <span className="text-emerald-400">Green</span> — filed within
+                  15 days (fast and transparent)
+                </li>
+                <li>
+                  <span className="text-amber-400">Amber</span> — filed within
+                  15-45 days (within the legal window, but slower)
+                </li>
+                <li>
+                  <span className="text-rose-400">Red</span> — filed after 45
+                  days (late — they broke the deadline)
+                </li>
+              </ul>
+              <p>
+                Always check the{" "}
+                <strong className="text-slate-100">Transaction Date</strong>{" "}
+                <span className="text-slate-400">(when they traded)</span> vs.
+                the{" "}
+                <strong className="text-slate-100">Disclosure Date</strong>{" "}
+                <span className="text-slate-400">(when we found out)</span> to
+                understand the real timeline.
+              </p>
+            </EducationCard>
+
+            {/* Card 5: Understanding the Conviction Score */}
+            <EducationCard
+              icon={<Gauge className="h-5 w-5 text-sky-400" />}
+              title="Understanding the Conviction Score"
+              subtitle="How we rate the trades"
+            >
+              <p>
+                Every trade on Capitol Buys gets a{" "}
+                <strong className="text-slate-100">Conviction Score</strong>{" "}
+                <span className="text-slate-400">
+                  [a number from 0 to 100 that estimates how &quot;serious&quot; a trade
+                  looks]
+                </span>
+                . It&apos;s shown on the gauge next to each trade card. Our score
+                combines three factors:
+              </p>
+              <ol className="space-y-2 list-decimal list-inside">
+                <li>
+                  <strong className="text-slate-100">Trade Size</strong>{" "}
+                  <span className="text-slate-400">
+                    [how much money they put on the line]
+                  </span>{" "}
+                  — a $1M+ trade carries far more weight than a $1K position.
+                  Bigger bets suggest stronger conviction.
+                </li>
+                <li>
+                  <strong className="text-slate-100">Ownership</strong>{" "}
+                  <span className="text-slate-400">
+                    [who placed the trade — Self, Spouse, or Joint]
+                  </span>{" "}
+                  — trades made by the politician themselves score highest.
+                </li>
+                <li>
+                  <strong className="text-slate-100">Freshness</strong>{" "}
+                  <span className="text-slate-400">
+                    [how quickly they disclosed the trade]
+                  </span>{" "}
+                  — fast filers score higher, because quick disclosure suggests
+                  they aren&apos;t trying to hide anything.
+                </li>
+              </ol>
+              <p>
+                The result maps to three tiers:{" "}
+                <strong className="text-emerald-400">Strong Signal</strong>{" "}
+                (75+),{" "}
+                <strong className="text-amber-400">Moderate Signal</strong>{" "}
+                (40-74), or{" "}
+                <strong className="text-rose-400">Weak Signal</strong>{" "}
+                (below 40).
               </p>
             </EducationCard>
           </div>
